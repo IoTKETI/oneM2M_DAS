@@ -49,7 +49,7 @@ The MySQL is an open source RDB database so that it is free and light. RDB is ve
 - [Node.js](https://nodejs.org/en/)<br/>
 Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world. Node.js is very powerful in service implementation because it provide a rich and free web service API. So, we use it to make RESTful API base on the oneM2M standard.
 
-- [DAS](https://github.com/IoTKETI/DAS/archive/master.zip)<br/>
+- [oneM2M_DAS](https://github.com/IoTKETI/oneM2M_DAS/archive/master.zip)<br/>
 oneM2M_DAS source codes are written in JavaScript. So they don't need any compilation or installation before running.
 
 ## Configuration
