@@ -304,7 +304,7 @@ das-ae (http) (10.0.75.1) running at 7581 port
 
 [SwaggerEditor](https://editor.swagger.io/)
 
-[YAML file for SwaggerEditor]()
+[YAML file for SwaggerEditor](dasapi.yaml)
 
 [Postman](https://www.getpostman.com/)
 [End]

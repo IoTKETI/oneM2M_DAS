@@ -1,0 +1,848 @@
+openapi: 3.0.1
+info:
+  title: DAS server
+  description: >-
+    This is a sample server Petstore server.  You can find out more about    
+    Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
+    #swagger](http://swagger.io/irc/).      For this sample, you can use the api
+    key `special-key` to test the authorization     filters.
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+servers:
+  - url: 'http://localhost:7580'
+  - url: 'http://localhost:7581'
+  - url: 'http://localhost:7582'
+  - url: 'http://testkato.japaneast.cloudapp.azure.com:7580'
+  - url: 'http://testkato.japaneast.cloudapp.azure.com:7581'
+tags:
+  - name: DAS
+    description: Everything about your DAS server
+    externalDocs:
+      description: Find out more
+      url: 'http://swagger.io'
+paths:
+  /das/dynaAuth:
+    post:
+      tags:
+        - das
+      summary: Dynamic Authorization API
+      operationId: dynamicACPInfo
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+          example: 123456
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+      requestBody:
+        description: dynamicACPInfo contents
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DasRequest'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DasResponse'
+        '500':
+          description: Exception Error.
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /das/rce:
+    post:
+      tags:
+        - resource
+      summary: Add resource
+      operationId: addResource
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+          example: 12345
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+      requestBody:
+        description: Add resource to DB
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resource'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '500':
+          description: Exception Error.
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  '/das/rce/_/{resource_uri}':
+    get:
+      tags:
+        - resource
+      summary: Retrieve resource
+      operationId: getResource
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+        - name: resource_uri
+          in: path
+          description: The resource ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '500':
+          description: Exception Error.
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+    put:
+      tags:
+        - resource
+      summary: Update resource
+      operationId: updateResource
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+        - name: resource_uri
+          in: path
+          description: The resource ID.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Resource to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateResource'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/updateResource'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '500':
+          description: Validation exception
+          content: {}
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+    delete:
+      tags:
+        - resource
+      summary: Delete resource
+      operationId: deleteResource
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+        - name: resource_uri
+          in: path
+          description: The resource ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: succeassful operartion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '500':
+          description: Exception Error.
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /das/rceList:
+    get:
+      tags:
+        - resource
+      summary: Discovery resources
+      description: Retrieve all resource_ids
+      operationId: getresourceList
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+        - name: ty
+          in: query
+          description: resource type
+          schema:
+            type: integer
+          example: 2
+        - name: class
+          in: query
+          description: Class of AE
+          schema:
+            type: integer
+          example: 0
+        - name: usr
+          in: query
+          description: Usr id
+          schema:
+            type: string
+          example: USR0001
+        - name: name
+          in: query
+          description: Display name
+          schema:
+            type: string
+          example: センサー
+        - name: datatype
+          in: query
+          description: Type of data
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: type of AE
+          schema:
+            type: integer
+          example: 125
+        - name: pae
+          in: query
+          description: parental AE
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/resourceList'
+        '500':
+          description: Exception Error.
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /das/acp:
+    post:
+      tags:
+        - acp
+      summary: Creates acp entry
+      operationId: createACP
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+          example: 12345
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+      requestBody:
+        description: create ACP
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Acp'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Acp'
+        '500':
+          description: Exception Error.
+    get:
+      tags:
+        - acp
+      summary: Retrive ACP
+      description: Retrive ACP for originator to access target_id.
+      operationId: getACP
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+        - name: trid
+          in: query
+          description: Target resource id
+          required: true
+          schema:
+            type: string
+        - name: or
+          in: query
+          description: Originator id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Acp'
+        '500':
+          description: Exception Error.
+    put:
+      tags:
+        - acp
+      summary: Update acp entry
+      operationId: updateACP
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+      requestBody:
+        description: update ACP
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Acp'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Acp'
+        '500':
+          description: Exception Error.
+    delete:
+      tags:
+        - acp
+      summary: Delete acp entry
+      operationId: deleteACP
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: trid
+          schema:
+            type: string
+          required: true
+          example: //kddi.jp/cse-id/cse-base/sensor_ae
+        - in: query
+          name: or
+          schema:
+            type: string
+          required: true
+          example: //kddi.jp/cse-id/cse-base/service_ae
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Acp'
+        '500':
+          description: Exception Error.
+  /das/acpList:
+    get:
+      tags:
+        - acp
+      summary: Retrieve list of acps
+      operationId: getACPList
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+        - name: trid
+          in: query
+          description: Target resource id
+          schema:
+            type: string
+        - name: or
+          in: query
+          description: Originator id
+          schema:
+            type: string
+        - name: usr
+          in: query
+          description: Usr id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACPList'
+        '500':
+          description: Exception Error.
+  /das/token:
+    post:
+      tags:
+        - token
+      summary: Create token
+      operationId: createToken
+      parameters:
+        - in: header
+          name: X-M2M-RI
+          schema:
+            type: string
+          required: true
+          example: 1234567
+        - in: header
+          name: content-type
+          schema:
+            type: string
+          required: true
+          example: application/json
+      requestBody:
+        description: create token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/roleids'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        '500':
+          description: Exception Error.
+components:
+  schemas:
+    roleids:
+      type: object
+      properties:
+        or:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/service_ae
+        trid:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/sensor_ae
+        rlids:
+          type: string
+          example:
+            - 1234abcd@role-issuer.com
+    DasRequest:
+              type: object
+              properties:
+                'm2m:seci':
+                  type: object
+                  properties:
+                    sit:
+                      type: integer
+                      example: 1
+                    dreq:
+                      type: object
+                      properties:
+                        or:
+                          type: string
+                          example: //kddi.jp/cse-id/cse-base/service_ae
+                        trt:
+                          type: integer
+                          example: 2
+                        op:
+                          type: string
+                          example: 5
+                        oip:
+                          type: object
+                          properties:
+                            ipv4:
+                              type: string
+                              example: 192.168.2.3
+                        olo:
+                          type: string
+                          example:
+                            - JP
+                            - KR
+                        orid:
+                          type: string
+                          example:
+                            - 1234abcd@role-issuer.com
+                            - 5678efgh@role-issuer.com
+                        rts:
+                          type: string
+                          example: 20191103T112032
+                        trid:
+                          type: string
+                          example: //kddi.jp/cse-id/cse-base/sensor_ae
+                        ppl:
+                          type: string
+                          example: '60000'
+                        rfa:
+                          type: string
+                          example:
+                            - 1234abcd@role-issuer.com
+                            - 5678efgh@role-issuer.com
+                        tids:
+                          type: string
+                          example:
+                            - 1234abcd@token-issuer.com
+                            - 5678defg@token-issuer.com
+    DasResponse:
+      type: object
+      properties:
+                'm2m:seci':
+                  type: object
+                  properties:
+                    sit:
+                      type: integer
+                      example: 2
+                    dres:
+                      type: object
+                      properties:
+                        dai:
+                          type: object
+                          properties:
+                            gp:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  acor:
+                                    description: request originator
+                                    type: string
+                                    example:
+                                      - //abc.org/C190AAA
+                                      - //abc.org/C190BBB
+                                      - //abc.org/C190CCC
+                                  acop:
+                                    type: integer
+                                    example: 5
+                                  acco:
+                                    type: object
+                                    properties:
+                                      actw:
+                                        type: string
+                                        example:
+                                          - '* 0-5 2,6,10 * * * *'
+                                      acip:
+                                        type: object
+                                        properties:
+                                          ipv4:
+                                            type: array
+                                            items:
+                                              type: string
+                                              example: null
+                                          ipv6:
+                                            type: array
+                                            items:
+                                              type: string
+                                      aclr:
+                                        type: object
+                                        items:
+                                          type: string
+                                          example: ''
+                                  acaf:
+                                    type: boolean
+                                    example: true
+                            pl:
+                              type: string
+                              example: 3600
+                        tkns:
+                          description: JSON Web Token ID List
+                          type: string
+                          example:
+                            - eyJ0eXAiOiJK.eyJpc3MiOiJqb2UiLA0KIC.dBjftJeZ4CVP
+                            - >-
+                              eyJ0eXAiOiJK.eyJpc3MiOiJqb2UiLA0KIC.dBjftJeZ4CVP.5eym8TW_c8SuK.SdiwkIr3a.XFBoMYUZo
+    ACPList:
+      type: object
+      properties:
+        acps:
+          type: array
+          items:
+            type: object
+            properties:
+              trid:
+                description: target id
+                type: string
+              or:
+                description: originator
+                type: string
+    Resource:
+      type: object
+      properties:
+        url:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/sensor_ae
+        ty:
+          type: integer
+          format: int64
+          example: 2
+        sri:
+          type: string
+          example: 7070045277BCV0
+        class:
+          type: integer
+          format: int64
+          example: 0
+        usr:
+          type: string
+          example: USR0001
+        name:
+          type: string
+          example: センサー
+        datatypes:
+          type: array
+          items:
+            type: string
+          example:
+            - DATA001
+            - DATA002
+        type:
+          type: integer
+          format: int64
+          example: 125
+        policy:
+          type: array
+          items:
+            type: object
+            properties:
+              data_id:
+                type: string
+              requirw_flag:
+                type: boolean
+              purpose:
+                type: string
+          example:
+            - data_id: DATA0001
+              required_flag: true
+              purpose: PURPOSE01
+            - data_id: DATA0003
+              required_flag: false
+              purpose: PURPOSE03
+    resourceList:
+      type: object
+      properties:
+        resource:
+          type: array
+          items:
+            type: string
+    updateResource:
+      type: object
+      properties:
+        class:
+          type: integer
+          format: int64
+          example: 0
+        usr:
+          type: string
+          example: USR0001
+        name:
+          type: string
+          example: センサー
+        datatypes:
+          type: array
+          items:
+            type: string
+          example:
+            - DATA001
+            - DATA002
+        type:
+          type: integer
+          format: int64
+          example: 125
+        policy:
+          type: array
+          items:
+            type: object
+            properties:
+              data_id:
+                type: string
+              requirw_flag:
+                type: boolean
+              purpose:
+                type: string
+          example:
+            - data_id: DATA0001
+              required_flag: true
+              purpose: PURPOSE01
+            - data_id: DATA0003
+              required_flag: false
+              purpose: PURPOSE03
+      xml:
+        name: updateResource
+    Acp-delete:
+      type: object
+      properties:
+        trid:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/sensor_ae
+        or:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/service_ae
+    token:
+      type: object
+    Acp:
+      type: object
+      properties:
+        trid:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/sensor_ae
+        or:
+          type: string
+          example: //kddi.jp/cse-id/cse-base/service_ae
+        usr:
+          type: string
+          example: USR0001
+        rlid:
+          type: string
+          example: 1234abcd@role-issuer.com
+        policy:
+          type: object
+          properties:
+            acop:
+              type: integer
+              example: 63
+            acco:
+              type: object
+              properties:
+                actw:
+                  type: array
+                  items:
+                    type: string
+                    example: '* 0-5 2,6,10 * * * *'
+                acip:
+                  type: object
+                  properties:
+                    ipv4:
+                      type: array
+                      items:
+                        type: string
+                        example: null
+                    ipv6:
+                      type: array
+                      items:
+                        type: string
+                        example: null
+                aclr:
+                  type: object
+                  items:
+                    type: string
+                    example: null
+            acaf:
+              type: boolean
+              example: true
+            pl:
+              type: string
+              example: '3600'
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+          scopes:
+            'write:pets': modify pets in your account
+            'read:pets': read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
