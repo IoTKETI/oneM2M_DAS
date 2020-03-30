@@ -1,5 +1,6 @@
 # oneM2M_DAS
 ## Introduction
+
 oneM2M_DAS platform is a oneM2M compliant IoT Dynamic Authorization System server platform designed to offer a flexible access control decision mechanism for accessing resource from IoT application and devices. Figure 1 shows the architecture of DAS platform structured with oneM2M entities and reference points.
 
 <div align="center">
@@ -14,6 +15,7 @@ oneM2M_DAS platform provides a series of REST APIs for protocol HTTP to realize 
 </div>
 
 <center>Figure 2 Interconnection between oneM2M_DAS and IoT applications/devices and IN-CSE</center>
+
 ## oneM2M_DAS Platform
 
 ### Introduction
@@ -25,6 +27,7 @@ oneM2M_DAS is a middleware server platform that stores virtual representations (
 </div>
 
 <center>Figure 3 oneM2M_DAS server platform components</center>
+
 The oneM2M_DAS server platform can be implemented using diverse programming languages and the oneM2M_DAS is developed using Node JS. In addition, oneM2M_DAS uses Node JS express modules which provides diverse modules for developers including HTTP instead of Node JS express framework.
 The oneM2M_DAS server platform is compliant to oneM2M standards and supports HTTP bindings specified also in oneM2M standards. The oneM2M_DAS server platform implements oneM2M Dynamic Authorization System server with structured resource architectures and access control policy info providing authorization decision function through RESTful APIs. The oneM2M_DAS server platform uses MySQL DBMS for resources and access control policy and access token storage.
 
@@ -49,6 +52,7 @@ The call flows as shown in Figure 4 indicates the communications and interaction
 </div>
 
 <center>Figure 4 oneM2M_DAS interaction with IoT devices, applications, and IN-CSE</center>
+
 ### Components
 
 oneM2M_DAS server consists of HTTP server and MySQL DBMS while IoT applications implement HTTP clients in order to communicate with oneM2M_DAS server directly or indirectly via IN-CSE.
@@ -58,6 +62,7 @@ oneM2M_DAS server consists of HTTP server and MySQL DBMS while IoT applications 
 </div>
 
 <center>Figure 5 oneM2M_DAS platform components</center>
+
 ### S/W Architecture
 
 For protocol binding support, oneM2M_DAS has HTTP server internally.  Mainly it consists of requester and responder. The requester contains the DB access component. Every HTTP request is go through requester component, parser, actor and then create SQL query to data access (e.g. retrieval, discovery) with DB connector. When it gets access result, the responder creates the response in JSON serialization.
@@ -67,6 +72,7 @@ For protocol binding support, oneM2M_DAS has HTTP server internally.  Mainly it 
 </div>
 
 <center>Figure 6 oneM2M_DAS platform S/W architecture</center>
+
 ### Source Code Directory
 
 The figure below shows the oneM2M_DAS Node JS source directory. For the detailed functions and
@@ -95,17 +101,19 @@ roles for each Node JS file, please refer to the Table 1.
 ```
 
 <center>Figure 7 oneM2M_DAS Node JS source code directory</center>
+
 The reference table below shows the role and function of provided Node JavaScript based files.
 
 <center>Table 1 Function Reference Table for Node JS Files</center>
+
 | Source File       | Role and Function                                            |
 |:---|:---|
-| app.js            | This file acts as role of flow router and it is the main code running oneM2M_DAS server.<br>① It handles initial processing of received packets.<br>② It initiates HTTP server with ‘listening’ mode to wait for HTTP requests target to the oneM2M_DAS HTTP server.<br>③ It handles the parsing of URL of packets and evaluate the correctness of the request body resulted of parsing. It then sends the request to resource.js to continue the processing if the request is valid one, otherwise throws exceptions.<br>④ It also contains the logic for checking access control information received from IN-CSE to generate temporal access control policy or granting permission. |
-| app-ae.js         | This file acts as role of flow router and it is the main code running oneM2M_DAS server.<br>① It handles initial processing of received packets.<br>② It initiates HTTP server with ‘listening’ mode to wait for HTTP requests target to the oneM2M_DAS AE HTTP server.<br>③ It handles the parsing of URL of packets and evaluate the correctness of the request body resulted of parsing. If the request is targeted to oneM2M_DAS Server, it forwards the request to oneM2M_DAS Server.<br>④ It registers itself to IN-CSE to enable a trusted communication. |
+| app.js            | This file acts as role of flow router and it is the main code running oneM2M_DAS server.<br>① It handles initial processing of received packets.<br>② It initiates HTTP server with ‘listening’ mode to wait for HTTP requests target to the oneM2M_DAS HTTP server.<br>③ It handles the parsing of URL of packets and evaluate the correctness of the request body resulted of parsing. It then sends the request to resource.js to continue the processing if the request is valid one, otherwise throws exceptions.<br>④ It also contains the logic for checking access control information received from IN-CSE to generate and send back temporal access control policy or granting permission. |
+| app-ae.js         | This file acts as role of flow router and it is the main code running oneM2M_DAS AE.<br>① It handles initial processing of received packets.<br>② It initiates HTTP server with ‘listening’ mode to wait for HTTP requests target to the oneM2M_DAS AE HTTP server.<br>③ It handles the parsing of URL of packets and evaluate the correctness of the request body resulted of parsing. If the request is targeted to oneM2M_DAS Server, it forwards the request to oneM2M_DAS Server. It works like a proxy server between IN-CSE and oneM2M_DAS server.<br>④ It registers itself to IN-CSE to enable a trusted communication. |
 | dasserver.js      | This file initiates oneM2M_DAS server and helps loading main Node JS files.<br>It also contains configuration parameters for oneM2M_DAS server such as defaultbodytype indicating the serialization, usecsebase<br/>indicating CSEBase name, usecseid indicating CSEID, usedbhost indicating the host address running MySQL, and usedbpass indicating the password for MySQL etc. Users can modify those configuration parameters. |
 | das-ae.js         | This file initiates oneM2M_DAS AE and helps loading main Node JS files.<br>It also contains configuration parameters for oneM2M_DAS AE such as  usecsebase indicating CSEBase name, usecseid indicating CSEID etc. Users can modify those configuration parameters. |
 | das/db_action.js  | This file contains parameters used to connect and access to the database and parameters for returning response results from the database. |
-| das/resource.js   | It is core file to process the CREATE, RETRIEVE, UPDATE, DELETE, NOTIFY and DISCOVERY operations for oneM2M resource primitives, access control info, and tokens.<br>This file undertakes the processing of parsed request URI and request body received from app.js according to corresponding operation. It converts the data into a format to process the data and connect to mysql database.<br>The mysql database is initialized and handled by db_action.js and sql_action.js module. |
+| das/resource.js   | It is core file to process the CREATE, RETRIEVE, UPDATE, DELETE, NOTIFY operations for oneM2M resource primitives, access control info, and tokens.<br>This file undertakes the processing of parsed request URI and request body received from app.js according to corresponding operation. It converts the data into a format to process the data and connect to mysql database.<br>The mysql database is initialized and handled by db_action.js and sql_action.js module. |
 | das/responder.js  | It is responsible for handling the response process.<br>It receives processing results from app.js and resource.js modules and generates responses from the processing results in JSON serialization format. |
 | das/sql_action.js | This file contains functions to receive data and parameters required for a series of database operations and functions to call db_action.js module to return data from database. |
 | das/time-check.js | This file contains functions to realizing the time-window based access control mechanism. |
@@ -133,6 +141,7 @@ When these information are included in the dynamic authorization request receive
 oneM2M_DAS is providing Restful API to manage the resource and ACP info, and dynamic authorization function.  Table 2 shows the supported list of APIs.
 
 <center>Table 2 API lists</center>
+
 | Functionality       | URI  |  Method |
 |:-----------------|:-------------|:------|
 | dynamic Authorization|das/dynaAuth	|POST|
@@ -182,7 +191,7 @@ v12.9.0
 
 ```
 $ cd ~/
-$ git clone https://github.com/IoTKETI/DAS.git
+$ git clone https://github.com/IoTKETI/oneM2M_DAS.git
 $ cd DAS/
 $ npm install
 ```
