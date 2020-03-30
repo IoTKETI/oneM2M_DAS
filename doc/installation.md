@@ -7,7 +7,7 @@ oneM2M_DAS platform is a oneM2M compliant IoT Dynamic Authorization System serve
 <img src="figure1.png" width="800"/>
 </div>
 
-<div style="text-align:center">Figure 1 oneM2M complied oneM2M_DAS platform architecture</div>
+<div align="center">Figure 1 oneM2M complied oneM2M_DAS platform architecture</div>
 
 oneM2M_DAS platform provides a series of REST APIs for protocol HTTP to realize dynamic access control mechanism between IoT applications and devices through IN-CSE as shown in Figure2. APIs for creation and retrieval of oneM2M resources and access control policies are also provided to simplify the procedures of authorization management.
 
@@ -15,7 +15,7 @@ oneM2M_DAS platform provides a series of REST APIs for protocol HTTP to realize 
 <img src="figure2.png" width="800"/>
 </div>
 
-<div style="text-align:center">Figure 2 Interconnection between oneM2M_DAS and IoT applications/devices and IN-CSE</div>
+<div align="center">Figure 2 Interconnection between oneM2M_DAS and IoT applications/devices and IN-CSE</div>
 
 ## oneM2M_DAS Platform
 
@@ -27,7 +27,7 @@ oneM2M_DAS is a middleware server platform that stores virtual representations (
 <img src="figure3.png" width="800"/>
 </div>
 
-<div style="text-align:center">Figure 3 oneM2M_DAS server platform components</div>
+<div align="center">Figure 3 oneM2M_DAS server platform components</div>
 
 The oneM2M_DAS server platform can be implemented using diverse programming languages and the oneM2M_DAS is developed using Node JS. In addition, oneM2M_DAS uses Node JS express modules which provides diverse modules for developers including HTTP instead of Node JS express framework.
 The oneM2M_DAS server platform is compliant to oneM2M standards and supports HTTP bindings specified also in oneM2M standards. The oneM2M_DAS server platform implements oneM2M Dynamic Authorization System server with structured resource architectures and access control policy info providing authorization decision function through RESTful APIs. The oneM2M_DAS server platform uses MySQL DBMS for resources and access control policy and access token storage.
@@ -52,7 +52,7 @@ The call flows as shown in Figure 4 indicates the communications and interaction
 <img src="figure4.png" width="800"/>
 </div>
 
-<div style="text-align:center">Figure 4 oneM2M_DAS interaction with IoT devices, applications, and IN-CSE</div>
+<div align="center">Figure 4 oneM2M_DAS interaction with IoT devices, applications, and IN-CSE</div>
 
 ### Components
 
@@ -62,7 +62,7 @@ oneM2M_DAS server consists of HTTP server and MySQL DBMS while IoT applications 
 <img src="figure5.png" width="800"/>
 </div>
 
-<div style="text-align:center">Figure 5 oneM2M_DAS platform components</div>
+<div align="center">Figure 5 oneM2M_DAS platform components</div>
 
 ### S/W Architecture
 
@@ -72,7 +72,7 @@ For protocol binding support, oneM2M_DAS has HTTP server internally.  Mainly it 
 <img src="figure6.png" width="800"/>
 </div>
 
-<div style="text-align:center">Figure 6 oneM2M_DAS platform S/W architecture</div>
+<div align="center">Figure 6 oneM2M_DAS platform S/W architecture</div>
 
 ### Source Code Directory
 
@@ -101,7 +101,7 @@ roles for each Node JS file, please refer to the Table 1.
         └─ token.js
 ```
 
-<div style="text-align:center">Figure 7 oneM2M_DAS Node JS source code directory</div>
+<div align="center">Figure 7 oneM2M_DAS Node JS source code directory</div>
 
 The reference table below shows the role and function of provided Node JavaScript based files.
 
